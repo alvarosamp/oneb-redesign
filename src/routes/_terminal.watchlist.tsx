@@ -171,12 +171,12 @@ function WatchlistPage() {
                       setRuleFor(ruleFor === i.id ? null : i.id);
                       setResult(null);
                     }}
-                    className="text-xs font-medium text-primary hover:opacity-80"
+                    className="whitespace-nowrap text-xs font-medium text-primary hover:opacity-80"
                   >
                     {ruleFor === i.id ? "fechar" : "nova regra"}
                   </button>
                   {/* TODO: API -> api.delete(`/api/watchlist/${i.id}`) */}
-                  <button type="button" className="text-xs font-medium text-down hover:opacity-80">
+                  <button type="button" className="whitespace-nowrap text-xs font-medium text-down hover:opacity-80">
                     remover
                   </button>
                 </div>

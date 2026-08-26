@@ -62,7 +62,7 @@ export function Change({ value, suffix = "%" }: { value: number | null | undefin
   if (value === null || value === undefined) return <span className="num text-muted-dim">—</span>;
   const positive = value >= 0;
   return (
-    <span className={cn("num font-medium", positive ? "text-up" : "text-down")}>
+    <span className={cn("num whitespace-nowrap font-medium", positive ? "text-up" : "text-down")}>
       {positive ? "▲" : "▼"} {Math.abs(value).toFixed(2)}
       {suffix}
     </span>
