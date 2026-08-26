@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Panel } from "@/components/oneb/Panel";
-import { COMPLIANCE_TEXT } from "./_terminal";
+import { COMPLIANCE_TEXT } from "@/lib/constants";
 
 export const Route = createFileRoute("/")({
   head: () => ({
