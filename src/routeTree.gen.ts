@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TerminalRouteImport } from './routes/_terminal'
+import { Route as TerminalAlertasRouteImport } from './routes/_terminal.alertas'
+import { Route as TerminalFerramentaRouteImport } from './routes/_terminal.ferramenta'
+import { Route as TerminalWatchlistRouteImport } from './routes/_terminal.watchlist'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerminalRoute = TerminalRouteImport.update({
+  id: '/_terminal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TerminalAlertasRoute = TerminalAlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => TerminalRoute,
+} as any)
+const TerminalFerramentaRoute = TerminalFerramentaRouteImport.update({
+  id: '/ferramenta',
+  path: '/ferramenta',
+  getParentRoute: () => TerminalRoute,
+} as any)
+const TerminalWatchlistRoute = TerminalWatchlistRouteImport.update({
+  id: '/watchlist',
+  path: '/watchlist',
+  getParentRoute: () => TerminalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alertas': typeof TerminalAlertasRoute
+  '/ferramenta': typeof TerminalFerramentaRoute
+  '/watchlist': typeof TerminalWatchlistRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alertas': typeof TerminalAlertasRoute
+  '/ferramenta': typeof TerminalFerramentaRoute
+  '/watchlist': typeof TerminalWatchlistRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_terminal': typeof TerminalRouteWithChildren
+  '/_terminal/alertas': typeof TerminalAlertasRoute
+  '/_terminal/ferramenta': typeof TerminalFerramentaRoute
+  '/_terminal/watchlist': typeof TerminalWatchlistRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/alertas' | '/ferramenta' | '/watchlist'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/alertas' | '/ferramenta' | '/watchlist'
+  id:
+    | '__root__'
+    | '/'
+    | '/_terminal'
+    | '/_terminal/alertas'
+    | '/_terminal/ferramenta'
+    | '/_terminal/watchlist'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TerminalRoute: typeof TerminalRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_terminal': {
+      id: '/_terminal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof TerminalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_terminal/alertas': {
+      id: '/_terminal/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof TerminalAlertasRouteImport
+      parentRoute: typeof TerminalRoute
+    }
+    '/_terminal/ferramenta': {
+      id: '/_terminal/ferramenta'
+      path: '/ferramenta'
+      fullPath: '/ferramenta'
+      preLoaderRoute: typeof TerminalFerramentaRouteImport
+      parentRoute: typeof TerminalRoute
+    }
+    '/_terminal/watchlist': {
+      id: '/_terminal/watchlist'
+      path: '/watchlist'
+      fullPath: '/watchlist'
+      preLoaderRoute: typeof TerminalWatchlistRouteImport
+      parentRoute: typeof TerminalRoute
+    }
   }
 }
 
+interface TerminalRouteChildren {
+  TerminalAlertasRoute: typeof TerminalAlertasRoute
+  TerminalFerramentaRoute: typeof TerminalFerramentaRoute
+  TerminalWatchlistRoute: typeof TerminalWatchlistRoute
+}
+
+const TerminalRouteChildren: TerminalRouteChildren = {
+  TerminalAlertasRoute: TerminalAlertasRoute,
+  TerminalFerramentaRoute: TerminalFerramentaRoute,
+  TerminalWatchlistRoute: TerminalWatchlistRoute,
+}
+
+const TerminalRouteWithChildren = TerminalRoute._addFileChildren(
+  TerminalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TerminalRoute: TerminalRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
