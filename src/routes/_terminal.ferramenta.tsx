@@ -158,17 +158,6 @@ function DashboardPage() {
                 render: (r) => <Change value={r.change_pct} />,
               },
               {
-                key: "spark",
-                header: "Intradiário",
-                render: (r) => (
-                  <Sparkline
-                    values={r.spark}
-                    tone={r.change_pct >= 0 ? "up" : "down"}
-                    className="h-6 w-24"
-                  />
-                ),
-              },
-              {
                 key: "score",
                 header: "Score",
                 align: "right",

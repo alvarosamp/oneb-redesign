@@ -16,8 +16,8 @@ export function MetricCard({ label, value, changePct, hint, spark, className }: 
   return (
     <article className={cn("panel-surface flex flex-col gap-2 p-4", className)}>
       <span className="label-caps">{label}</span>
-      <div className="flex items-end justify-between gap-3">
-        <strong className="num text-2xl font-semibold leading-none text-foreground">{value}</strong>
+      <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+        <strong className="num min-w-0 truncate text-2xl font-semibold leading-none text-foreground">{value}</strong>
         {changePct !== undefined && changePct !== null && (
           <span
             className={cn(
