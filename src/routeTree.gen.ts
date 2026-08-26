@@ -10,33 +10,49 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TerminalRouteImport } from './routes/_terminal'
+import { Route as TerminalFerramentaRouteImport } from './routes/_terminal.ferramenta'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerminalRoute = TerminalRouteImport.update({
+  id: '/_terminal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TerminalFerramentaRoute = TerminalFerramentaRouteImport.update({
+  id: '/ferramenta',
+  path: '/ferramenta',
+  getParentRoute: () => TerminalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ferramenta': typeof TerminalFerramentaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ferramenta': typeof TerminalFerramentaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_terminal': typeof TerminalRouteWithChildren
+  '/_terminal/ferramenta': typeof TerminalFerramentaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/ferramenta'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/ferramenta'
+  id: '__root__' | '/' | '/_terminal' | '/_terminal/ferramenta'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TerminalRoute: typeof TerminalRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +64,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_terminal': {
+      id: '/_terminal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof TerminalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_terminal/ferramenta': {
+      id: '/_terminal/ferramenta'
+      path: '/ferramenta'
+      fullPath: '/ferramenta'
+      preLoaderRoute: typeof TerminalFerramentaRouteImport
+      parentRoute: typeof TerminalRoute
+    }
   }
 }
 
+interface TerminalRouteChildren {
+  TerminalFerramentaRoute: typeof TerminalFerramentaRoute
+}
+
+const TerminalRouteChildren: TerminalRouteChildren = {
+  TerminalFerramentaRoute: TerminalFerramentaRoute,
+}
+
+const TerminalRouteWithChildren = TerminalRoute._addFileChildren(
+  TerminalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TerminalRoute: TerminalRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
