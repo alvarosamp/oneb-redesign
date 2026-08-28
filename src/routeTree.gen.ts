@@ -14,6 +14,7 @@ import { Route as TerminalRouteImport } from './routes/_terminal'
 import { Route as TerminalAlertasRouteImport } from './routes/_terminal.alertas'
 import { Route as TerminalFerramentaRouteImport } from './routes/_terminal.ferramenta'
 import { Route as TerminalWatchlistRouteImport } from './routes/_terminal.watchlist'
+import { Route as TerminalAtivoSymbolRouteImport } from './routes/_terminal.ativo.$symbol'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,18 +40,25 @@ const TerminalWatchlistRoute = TerminalWatchlistRouteImport.update({
   path: '/watchlist',
   getParentRoute: () => TerminalRoute,
 } as any)
+const TerminalAtivoSymbolRoute = TerminalAtivoSymbolRouteImport.update({
+  id: '/ativo/$symbol',
+  path: '/ativo/$symbol',
+  getParentRoute: () => TerminalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof TerminalAlertasRoute
   '/ferramenta': typeof TerminalFerramentaRoute
   '/watchlist': typeof TerminalWatchlistRoute
+  '/ativo/$symbol': typeof TerminalAtivoSymbolRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof TerminalAlertasRoute
   '/ferramenta': typeof TerminalFerramentaRoute
   '/watchlist': typeof TerminalWatchlistRoute
+  '/ativo/$symbol': typeof TerminalAtivoSymbolRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +67,13 @@ export interface FileRoutesById {
   '/_terminal/alertas': typeof TerminalAlertasRoute
   '/_terminal/ferramenta': typeof TerminalFerramentaRoute
   '/_terminal/watchlist': typeof TerminalWatchlistRoute
+  '/_terminal/ativo/$symbol': typeof TerminalAtivoSymbolRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/alertas' | '/ferramenta' | '/watchlist'
+  fullPaths: '/' | '/alertas' | '/ferramenta' | '/watchlist' | '/ativo/$symbol'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alertas' | '/ferramenta' | '/watchlist'
+  to: '/' | '/alertas' | '/ferramenta' | '/watchlist' | '/ativo/$symbol'
   id:
     | '__root__'
     | '/'
@@ -72,6 +81,7 @@ export interface FileRouteTypes {
     | '/_terminal/alertas'
     | '/_terminal/ferramenta'
     | '/_terminal/watchlist'
+    | '/_terminal/ativo/$symbol'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -116,6 +126,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TerminalWatchlistRouteImport
       parentRoute: typeof TerminalRoute
     }
+    '/_terminal/ativo/$symbol': {
+      id: '/_terminal/ativo/$symbol'
+      path: '/ativo/$symbol'
+      fullPath: '/ativo/$symbol'
+      preLoaderRoute: typeof TerminalAtivoSymbolRouteImport
+      parentRoute: typeof TerminalRoute
+    }
   }
 }
 
@@ -123,12 +140,14 @@ interface TerminalRouteChildren {
   TerminalAlertasRoute: typeof TerminalAlertasRoute
   TerminalFerramentaRoute: typeof TerminalFerramentaRoute
   TerminalWatchlistRoute: typeof TerminalWatchlistRoute
+  TerminalAtivoSymbolRoute: typeof TerminalAtivoSymbolRoute
 }
 
 const TerminalRouteChildren: TerminalRouteChildren = {
   TerminalAlertasRoute: TerminalAlertasRoute,
   TerminalFerramentaRoute: TerminalFerramentaRoute,
   TerminalWatchlistRoute: TerminalWatchlistRoute,
+  TerminalAtivoSymbolRoute: TerminalAtivoSymbolRoute,
 }
 
 const TerminalRouteWithChildren = TerminalRoute._addFileChildren(

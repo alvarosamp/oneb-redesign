@@ -1,6 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { mockAlerts, mockDashboard, mockWatchlist } from "@/lib/mock/data";
-import type { AlertItem, BacktestResult, DashboardSummary, WatchlistItem } from "@/lib/types";
+import { buildAssetDetail, mockDesk } from "@/lib/mock/technical";
+import type {
+  AlertItem,
+  AssetDetail,
+  BacktestResult,
+  DashboardSummary,
+  DeskRow,
+  WatchlistItem,
+} from "@/lib/types";
 
 /**
  * Ponto único de integração com o FastAPI.
@@ -54,4 +62,22 @@ export async function backtestRule(payload: {
     avg_move_pct: Number((hitRate * 3.4 - 0.6).toFixed(2)),
     confidence: hitRate > 0.6 ? "alta" : hitRate > 0.45 ? "media" : "baixa",
   } satisfies BacktestResult);
+}
+
+export function useAssetDetail(symbol: string) {
+  return useQuery<AssetDetail | null>({
+    queryKey: ["asset-detail", symbol],
+    // TODO: API -> api.get<AssetDetail>(`/api/assets/${symbol}`)
+    queryFn: () => delay(buildAssetDetail(symbol)),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useTechDesk() {
+  return useQuery<DeskRow[]>({
+    queryKey: ["tech-desk"],
+    // TODO: API -> api.get<DeskRow[]>("/api/technical-desk")
+    queryFn: () => delay(mockDesk),
+    refetchInterval: 30_000,
+  });
 }

@@ -86,3 +86,59 @@ export interface BacktestResult {
   avg_move_pct: number;
   confidence: Confidence;
 }
+
+export interface Candle {
+  t: string;
+  o: number;
+  h: number;
+  l: number;
+  c: number;
+  v: number;
+}
+
+export interface Indicator {
+  name: string;
+  value: string;
+  reading: string;
+  bias: "alta" | "baixa" | "neutro";
+  confidence: Confidence;
+}
+
+export interface PriceLevel {
+  label: string;
+  value: number;
+  kind: "suporte" | "resistencia";
+}
+
+export interface AssetDetail extends QuoteRow {
+  day: {
+    open: number;
+    high: number;
+    low: number;
+    prev_close: number;
+    volume: string;
+  };
+  candles: Candle[];
+  indicators: Indicator[];
+  levels: PriceLevel[];
+  notes: string[];
+  news: NewsItem[];
+  alerts: AlertItem[];
+}
+
+export interface DeskRow {
+  symbol: string;
+  label: string;
+  price: number;
+  change_pct: number;
+  trend: "alta forte" | "alta" | "baixa" | "baixa forte";
+  rsi: number;
+  ema_stack: string;
+  atr_pct: number;
+  volume_ratio: number;
+  setup: string;
+  score: number;
+  confidence: Confidence;
+  status: DataStatus;
+  spark: number[];
+}
